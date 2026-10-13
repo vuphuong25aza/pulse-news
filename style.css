@@ -1,0 +1,893 @@
+/* 1. Màu sắc: nền trắng và xanh lam của trang báo. */
+:root {
+  --bg: #fff;
+  --panel: #f4f7fa;
+  --panel2: #eaf1f7;
+  --line: #dce2e8;
+  --text: #202a35;
+  --muted: #687582;
+  --accent: #155e9a;
+  --reading: 18px;
+}
+body.dark {
+  --bg: #111d2a;
+  --panel: #192a3b;
+  --panel2: #23384d;
+  --line: #34485d;
+  --text: #eef3f8;
+  --muted: #aab8c7;
+  --accent: #8dc8ff;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font:
+    15px Arial,
+    Helvetica,
+    sans-serif;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+  border: 0;
+  background: none;
+  color: inherit;
+}
+button:hover,
+a:hover {
+  color: var(--accent);
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+input {
+  min-width: 0;
+}
+img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+p {
+  line-height: 1.65;
+}
+[hidden] {
+  display: none !important;
+}
+/* 2. Đầu trang và menu ngang. */
+.topline {
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  padding: 10px max(4%, calc((100% - 1200px) / 2));
+  color: var(--muted);
+  font-size: 12px;
+}
+header,
+nav,
+main,
+footer {
+  width: min(1200px, 92%);
+  margin-inline: auto;
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 25px 0;
+}
+.logo {
+  display: inline-block;
+  font-size: 43px;
+  font-weight: 800;
+  letter-spacing: -2px;
+  color: var(--accent);
+  line-height: 1;
+}
+.logo small {
+  font-size: 10px;
+  letter-spacing: 1.2px;
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-weight: 400;
+}
+#searchForm {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  width: 380px;
+  padding: 8px 12px;
+  background: var(--bg);
+}
+#searchForm > span {
+  font-size: 25px;
+  color: var(--muted);
+}
+#search {
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  width: 100%;
+  outline: none;
+  font-size: 14px;
+}
+kbd {
+  color: var(--muted);
+  font-size: 12px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 2px 6px;
+}
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+#theme {
+  font-size: 27px;
+}
+.save-nav {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.save-nav b {
+  border-radius: 3px;
+  padding: 3px 6px;
+  background: var(--panel2);
+  color: var(--accent);
+}
+nav {
+  display: flex;
+  align-items: stretch;
+  background: #13548c;
+  color: #fff;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 0 10px;
+}
+nav button {
+  font-size: 15px;
+  font-weight: 700;
+  padding: 15px 20px;
+}
+nav button:hover,
+nav button.active {
+  color: #fff;
+  background: #0a3a66;
+}
+.trending {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  overflow-x: auto;
+  white-space: nowrap;
+  font-size: 12px;
+}
+.trending strong {
+  font-size: 11px;
+  color: var(--accent);
+}
+.trending button {
+  font-size: 13px;
+}
+.demo {
+  margin-left: auto;
+  font-size: 11px;
+}
+i,
+.live-dot {
+  display: none;
+}
+/* 3. Tin nổi bật: ảnh chụp phía trên, tiêu đề phía dưới. */
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin: 24px 0 20px;
+}
+.section-title h1 {
+  font-size: 24px;
+  color: var(--accent);
+  border-left: 4px solid var(--accent);
+  padding-left: 12px;
+}
+.edition {
+  display: none;
+}
+.lead-grid {
+  display: grid;
+  grid-template-columns: 1.9fr 1fr 1fr;
+  gap: 24px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+}
+.hero {
+  min-width: 0;
+}
+.hero > img {
+  height: 285px;
+}
+.hero-content {
+  padding-top: 14px;
+}
+.eyebrow {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+}
+.hero h2 {
+  font-size: 27px;
+  line-height: 1.3;
+  margin: 9px 0 12px;
+}
+.hero p {
+  font-size: 15px;
+  color: var(--muted);
+  margin-bottom: 15px;
+}
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.side-stories {
+  display: grid;
+  align-content: start;
+  gap: 23px;
+}
+.side-card .photo {
+  display: block;
+  height: 143px;
+}
+.side-card .eyebrow {
+  display: block;
+  margin-top: 10px;
+}
+.side-card h3 {
+  font-size: 17px;
+  line-height: 1.4;
+  margin: 7px 0 10px;
+}
+.brief {
+  background: var(--panel);
+  border-top: 3px solid #155e9a;
+  padding: 18px;
+  align-self: start;
+}
+.brief-title {
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 700;
+}
+.brief h2 {
+  font-size: 20px;
+  line-height: 1.3;
+  margin: 18px 0 9px;
+}
+.brief > p {
+  color: var(--muted);
+  font-size: 13px;
+}
+.brief-item {
+  display: flex;
+  gap: 10px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+.brief-item > span {
+  color: var(--accent);
+  font-size: 12px;
+  margin-top: 3px;
+}
+.brief-item button {
+  text-align: left;
+  padding: 0;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.text-btn {
+  color: var(--accent);
+  font-size: 13px;
+  padding: 16px 0 0;
+}
+.brief-bottom {
+  display: none;
+}
+/* 4. Tin mới và thanh bên. */
+.content-layout {
+  display: grid;
+  grid-template-columns: 1fr 285px;
+  gap: 32px;
+  margin-top: 32px;
+}
+.latest {
+  margin: 0 0 20px;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 12px;
+}
+.section-title h2 {
+  color: var(--accent);
+  font-size: 23px;
+}
+.section-title h2 > span {
+  display: none;
+}
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.filters select {
+  font-size: 12px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--line);
+  padding: 8px;
+}
+#clear {
+  font-size: 12px;
+  color: var(--accent);
+}
+#resultInfo {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+#resultInfo:empty {
+  display: none;
+}
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+}
+.news-card {
+  min-width: 0;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.news-card .photo {
+  display: block;
+  height: 210px;
+}
+.news-card .eyebrow {
+  display: block;
+  margin-top: 12px;
+}
+.news-card h3 {
+  font-size: 20px;
+  line-height: 1.4;
+  margin: 8px 0;
+}
+.news-card p {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+.news-card .meta {
+  justify-content: space-between;
+}
+.bookmark {
+  font-size: 23px;
+  color: var(--muted);
+}
+.bookmark.on {
+  color: var(--accent);
+}
+.load-more {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 13px;
+  margin-top: 25px;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 14px;
+}
+.load-more span {
+  margin-left: 10px;
+}
+.aside-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 13px;
+}
+.aside-title h2 {
+  color: var(--accent);
+  font-size: 23px;
+}
+.popular-item {
+  display: flex;
+  gap: 14px;
+  border-bottom: 1px solid var(--line);
+  padding: 18px 0;
+}
+.popular-item > span {
+  font-size: 26px;
+  color: #9aaabd;
+}
+.popular-item h3 {
+  font-size: 15px;
+  line-height: 1.5;
+}
+.popular-item small {
+  display: block;
+  color: var(--muted);
+  margin-top: 8px;
+  font-size: 11px;
+}
+.newsletter {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--accent);
+  margin-top: 30px;
+  padding: 20px;
+}
+.newsletter h2 {
+  font-size: 21px;
+  line-height: 1.4;
+  margin-top: 14px;
+}
+.newsletter p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 13px 0;
+}
+.newsletter label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+.newsletter input {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  padding: 11px;
+  border-radius: 3px;
+  font-size: 13px;
+}
+.newsletter button {
+  width: 100%;
+  padding: 11px;
+  background: #155e9a;
+  color: white;
+  margin-top: 8px;
+  border-radius: 3px;
+  font-size: 13px;
+}
+.newsletter small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+.poll {
+  margin-top: 25px;
+  border: 1px solid var(--line);
+  padding: 20px;
+}
+.poll h3 {
+  font-size: 17px;
+  line-height: 1.45;
+  margin: 12px 0;
+}
+.poll button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  font-size: 13px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+.poll small {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+/* 5. Chân trang. */
+footer {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  padding: 30px 0;
+  margin-top: 45px;
+  border-top: 3px solid var(--accent);
+}
+footer .logo {
+  font-size: 32px;
+}
+footer p {
+  color: var(--muted);
+  font-size: 12px;
+}
+footer > div {
+  display: grid;
+  gap: 12px;
+  margin-left: auto;
+  font-size: 13px;
+}
+footer > div span {
+  color: var(--muted);
+  font-size: 11px;
+}
+#backTop {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  color: var(--accent);
+  background: var(--panel);
+  border-radius: 4px;
+  z-index: 5;
+}
+/* 6. Hộp đọc bài và bình luận. */
+dialog {
+  width: min(850px, 95vw);
+  max-height: 92vh;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--bg);
+  color: var(--text);
+}
+dialog::backdrop {
+  background: #0a1829bb;
+}
+.reader-top {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+  padding: 15px 24px;
+  z-index: 2;
+}
+.reader-top .logo {
+  font-size: 24px;
+}
+.reader-top button {
+  padding: 7px 10px;
+}
+#closeReader {
+  font-size: 26px;
+}
+#articleContent {
+  padding: 30px 42px;
+}
+#articleContent h1 {
+  font-size: 33px;
+  line-height: 1.3;
+  margin: 14px 0;
+}
+.article-tools {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+.article-tools button {
+  border: 1px solid var(--line);
+  padding: 9px 12px;
+  color: var(--accent);
+  font-size: 12px;
+  border-radius: 3px;
+}
+.article-disclaimer {
+  color: var(--muted);
+  font-size: 12px;
+  padding: 10px;
+  background: var(--panel);
+}
+.article-cover {
+  margin: 22px 0;
+  height: 350px;
+}
+#articleContent .body p {
+  font-size: var(--reading);
+  line-height: 1.8;
+  margin: 20px 0;
+}
+#articleContent .body h2 {
+  font-size: 24px;
+  margin-top: 28px;
+}
+.comments {
+  border-top: 1px solid var(--line);
+  padding-top: 25px;
+  margin-top: 30px;
+}
+.comments h2,
+.related h2 {
+  font-size: 22px;
+}
+.comments input,
+.comments textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  color: var(--text);
+  background: var(--bg);
+  padding: 12px;
+  margin-top: 12px;
+  border-radius: 3px;
+}
+.comments button {
+  background: #155e9a;
+  color: #fff;
+  padding: 11px 17px;
+  margin-top: 10px;
+  border-radius: 3px;
+}
+.comment {
+  border-bottom: 1px solid var(--line);
+  padding: 16px 0;
+}
+.comment p {
+  white-space: pre-wrap;
+  font-size: 15px;
+  margin-top: 8px;
+}
+.comment small {
+  font-size: 11px;
+  color: var(--muted);
+}
+.related {
+  margin-top: 30px;
+}
+.related button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  line-height: 1.6;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  color: var(--accent);
+}
+#toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 90%;
+  padding: 14px 20px;
+  background: #155e9a;
+  color: #fff;
+  border-radius: 4px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 20;
+  font-size: 13px;
+}
+#toast.show {
+  opacity: 1;
+}
+.empty {
+  grid-column: 1 / -1;
+  padding: 60px 20px;
+  background: var(--panel);
+  color: var(--muted);
+  line-height: 2;
+  text-align: center;
+}
+/* 7. Bố cục máy tính bảng và điện thoại. */
+@media (max-width: 1050px) {
+  .lead-grid {
+    grid-template-columns: 1.8fr 1fr;
+  }
+  .brief {
+    display: none;
+  }
+  nav button {
+    padding: 14px 17px;
+  }
+  .content-layout {
+    grid-template-columns: 1fr 250px;
+    gap: 25px;
+  }
+  .news-card .photo {
+    height: 155px;
+  }
+  .news-card h3 {
+    font-size: 18px;
+  }
+  .demo {
+    display: none;
+  }
+}
+@media (max-width: 760px) {
+  .topline {
+    font-size: 10px;
+    gap: 15px;
+  }
+  header {
+    flex-wrap: wrap;
+    gap: 18px;
+    padding: 22px 0;
+  }
+  .logo {
+    font-size: 36px;
+  }
+  .header-actions {
+    margin-left: auto;
+  }
+  #searchForm {
+    order: 3;
+    width: 100%;
+  }
+  nav {
+    width: 100%;
+    padding-inline: 4%;
+  }
+  nav button {
+    padding: 14px;
+    font-size: 14px;
+  }
+  .trending {
+    gap: 15px;
+  }
+  .trending strong {
+    font-size: 10px;
+  }
+  .lead-grid {
+    display: block;
+  }
+  .hero > img {
+    height: 250px;
+  }
+  .hero h2 {
+    font-size: 26px;
+  }
+  .side-stories {
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-top: 25px;
+  }
+  .side-card .photo {
+    height: 140px;
+  }
+  .side-card h3 {
+    font-size: 16px;
+  }
+  .content-layout {
+    display: block;
+  }
+  .news-grid {
+    display: block;
+  }
+  .news-card {
+    display: flow-root;
+    padding: 18px 0;
+  }
+  .news-card .photo {
+    float: left;
+    width: 37%;
+    height: 120px;
+    margin-right: 15px;
+  }
+  .news-card .eyebrow {
+    margin-top: 0;
+  }
+  .news-card h3 {
+    font-size: 18px;
+  }
+  .news-card p {
+    display: none;
+  }
+  .news-card .meta {
+    justify-content: flex-start;
+    margin-top: 8px;
+  }
+  .news-card .meta span {
+    font-size: 11px;
+  }
+  .section-title h2 {
+    font-size: 22px;
+  }
+  .right-column {
+    margin-top: 35px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .popular {
+    grid-column: 1 / -1;
+  }
+  .newsletter,
+  .poll {
+    margin-top: 0;
+    padding: 16px;
+  }
+  footer {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  footer > div {
+    width: 100%;
+    margin-left: 0;
+  }
+  #articleContent {
+    padding: 24px;
+  }
+  #articleContent h1 {
+    font-size: 27px;
+  }
+  .article-cover {
+    height: 230px;
+  }
+}
+@media (max-width: 420px) {
+  .right-column {
+    display: block;
+  }
+  .newsletter,
+  .poll {
+    margin-top: 25px;
+  }
+  .news-card .photo {
+    height: 105px;
+  }
+  .news-card h3 {
+    font-size: 16px;
+  }
+  .side-card .photo {
+    height: 105px;
+  }
+  .save-nav span {
+    display: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

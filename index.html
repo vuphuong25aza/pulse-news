@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#125c9c" />
+    <meta
+      name="description"
+      content="PULSE — Nhịp sống số. Xem công nghệ, cuộc sống và những ý tưởng mới."
+    />
+    <title>PULSE — Nhịp sống số</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Thanh thông tin đầu trang -->
+    <div class="topline">
+      <span>PULSE · TIN TỨC VÀ ĐỜI SỐNG</span><span id="date"></span>
+    </div>
+    <!-- Đầu trang: logo, tìm kiếm và các nút tiện ích -->
+    <header>
+      <a class="logo" href="#" aria-label="PULSE trang chủ"
+        >PULSE<small>GÓC NHÌN CUỘC SỐNG</small></a
+      >
+      <form id="searchForm" role="search">
+        <span aria-hidden="true">⌕</span
+        ><input
+          id="search"
+          aria-label="Tìm kiếm tin tức"
+          placeholder="Tìm kiếm tin tức…"
+          autocomplete="off"
+        /><kbd>/</kbd>
+      </form>
+      <div class="header-actions">
+        <button id="theme" aria-label="Đổi giao diện sáng tối">☼</button
+        ><button id="saved" class="save-nav">
+          <span>Tin đã lưu</span><b id="saveCount">0</b>
+        </button>
+      </div>
+    </header>
+    <!-- Menu chuyên mục được JavaScript tạo tự động -->
+    <nav id="nav" aria-label="Chuyên mục"></nav>
+    <!-- Nội dung chính của trang báo -->
+    <main>
+      <div class="trending">
+        <strong><i></i> ĐANG ĐƯỢC QUAN TÂM</strong
+        ><button data-query="AI"># Trí tuệ nhân tạo</button
+        ><button data-query="đô thị"># Đô thị tương lai</button
+        ><button data-query="xanh"># Sống xanh</button
+        ><span class="demo">Ấn bản trải nghiệm · Nội dung mẫu</span>
+      </div>
+      <!-- Khu vực tin nổi bật trên trang chủ -->
+      <section id="homeLead">
+        <div class="section-title">
+          <h1>Tin nổi bật</h1>
+          <span class="edition"></span>
+        </div>
+        <div class="lead-grid">
+          <article id="hero" class="hero"></article>
+          <div id="sideStories" class="side-stories"></div>
+          <aside class="brief">
+            <div class="brief-title"><span class="live-dot"></span> TIÊU ĐIỂM</div>
+            <h2>Đáng chú ý</h2>
+            <p>Gợi ý những bài viết bạn có thể quan tâm.</p>
+            <div id="briefList"></div>
+            <button class="text-btn" id="latestBtn">Xem tất cả</button>
+            <div class="brief-bottom">BAN BIÊN TẬP CHỌN <span></span></div>
+          </aside>
+        </div>
+      </section>
+      <!-- Bố cục hai cột: danh sách tin và thanh bên -->
+      <div class="content-layout">
+        <section class="news-section">
+          <div class="section-title latest">
+            <h2 id="listTitle">Dòng tin mới<span>.</span></h2>
+            <div class="filters">
+              <button id="clear" hidden>Xóa bộ lọc ×</button
+              ><select id="sort" aria-label="Sắp xếp tin">
+                <option value="new">Mới nhất</option>
+                <option value="popular">Đọc nhiều</option>
+              </select>
+            </div>
+          </div>
+          <div id="resultInfo" aria-live="polite"></div>
+          <div id="newsGrid" class="news-grid"></div>
+          <button id="loadMore" class="load-more">
+            Xem thêm câu chuyện <span>↓</span>
+          </button>
+        </section>
+        <aside class="right-column">
+          <section class="popular">
+            <div class="aside-title">
+              <h2>Đọc nhiều</h2>
+            </div>
+            <div id="popular"></div>
+          </section>
+          <section class="newsletter">
+            <span class="eyebrow">BẢN TIN CỦA BẠN</span>
+
+            <h2>Theo dõi chủ đề yêu thích</h2>
+            <p>
+              Tạo danh sách chủ đề yêu thích cho bản tin cá nhân ngay trên thiết bị này.
+            </p>
+            <form id="newsletter">
+              <label for="email">Email của bạn</label
+              ><input
+                id="email"
+                type="email"
+                placeholder="ban@example.com"
+                required
+              /><button>Lưu lựa chọn</button>
+            </form>
+            <small>Bản demo lưu cục bộ, không gửi email.</small>
+          </section>
+          <section class="poll">
+            <span class="eyebrow">GÓC ĐỘC GIẢ</span>
+            <h3>Bạn muốn đọc thêm về điều gì?</h3>
+            <div id="pollOptions"></div>
+            <small id="pollNote">Chọn một chủ đề để cá nhân hóa dòng tin.</small>
+          </section>
+        </aside>
+      </div>
+    </main>
+    <!-- Chân trang -->
+    <footer>
+      <a class="logo" href="#">PULSE<small>GÓC NHÌN CUỘC SỐNG</small></a>
+      <p>
+        Công nghệ, kinh doanh và cuộc sống thường ngày.<br />Dự án website đọc báo · HTML
+        / CSS / JavaScript
+      </p>
+      <div>
+        <a href="#" id="about">Về PULSE ↗</a
+        ><span>© 2026 PULSE. Nội dung minh họa tự biên soạn.</span>
+      </div>
+    </footer>
+    <button id="backTop" aria-label="Lên đầu trang">↑</button>
+    <!-- Hộp đọc bài: nội dung được app.js chèn vào khi chọn tin -->
+    <dialog id="reader">
+      <div class="reader-top">
+        <span class="logo">PULSE</span>
+        <div>
+          <button id="fontDown" aria-label="Giảm cỡ chữ">A−</button
+          ><button id="fontUp" aria-label="Tăng cỡ chữ">A+</button
+          ><button id="closeReader" aria-label="Đóng bài viết">×</button>
+        </div>
+      </div>
+      <div id="articleContent"></div>
+    </dialog>
+    <div id="toast" role="status"></div>
+    <!-- Nạp dữ liệu trước, sau đó nạp mã xử lý tương tác -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

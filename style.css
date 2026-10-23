@@ -5,7 +5,7 @@
   --panel2: #eaf1f7;
   --line: #dce2e8;
   --text: #202a35;
-  --muted: #687582;
+  --muted: #566573;
   --accent: #155e9a;
   --reading: 18px;
 }
@@ -141,7 +141,7 @@ header {
   background: transparent;
   color: var(--text);
   width: 100%;
-  outline: none;
+  /* Keep the keyboard focus indicator. */
   font-size: 14px;
 }
 kbd {
@@ -448,7 +448,7 @@ i,
 }
 .popular-item > span {
   font-size: 26px;
-  color: #9aaabd;
+  color: var(--muted);
 }
 .popular-item h3 {
   font-size: 15px;
@@ -883,7 +883,12 @@ dialog::backdrop {
     height: 105px;
   }
   .save-nav span {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -891,3 +896,26 @@ dialog::backdrop {
     scroll-behavior: auto;
   }
 }
+
+
+/* Keyboard access: keep rings visible on the blue navigation and in the reader. */
+nav button:focus-visible {
+  outline-color: #fff;
+  outline-offset: -4px;
+}
+.skip-link {
+  position: absolute;
+  left: 4%;
+  top: 8px;
+  transform: translateY(-200%);
+  padding: 12px;
+  background: var(--bg);
+  color: var(--accent);
+  z-index: 30;
+}
+.skip-link:focus { transform: none; }
+input::placeholder, textarea::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+.comments label { display: block; margin-top: 12px; }

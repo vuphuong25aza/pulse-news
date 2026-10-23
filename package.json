@@ -1,0 +1,26 @@
+{
+  "name": "pulse-news",
+  "version": "1.0.0",
+  "description": "**A Vietnamese news website frontend demo built with HTML, CSS and vanilla JavaScript.**",
+  "scripts": {
+    "test": "playwright test",
+    "test:a11y": "playwright test tests/accessibility.spec.js",
+    "test:a11y:chromium": "playwright test tests/accessibility.spec.js --project=chromium"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuphuong25aza/pulse-news.git"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/vuphuong25aza/pulse-news/issues"
+  },
+  "homepage": "https://github.com/vuphuong25aza/pulse-news#readme",
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "1.56.1"
+  },
+  "private": true
+}

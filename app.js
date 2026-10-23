@@ -26,6 +26,8 @@ function write(key, value) {
 }
 
 // TRẠNG THÁI: các lựa chọn hiện tại của người đọc.
+let readerOpener = null;
+let speechGeneration = 0;
 let saved = new Set(read("saved", []).filter(Number.isInteger));
 let category = "Tất cả",
   query = "",
@@ -78,7 +80,13 @@ function renderNav() {
     .join("");
 }
 function render() {
-  renderNav();
+  // Reuse category buttons so rendering does not discard keyboard focus.
+  if (!$("#nav").children.length) renderNav();
+  document.querySelectorAll("[data-cat]").forEach((button) => {
+    const active = category === button.dataset.cat && !savedOnly;
+    button.classList.toggle("active", active);
+    button.setAttribute("aria-pressed", active);
+  });
   $("#saveCount").textContent = saved.size;
   $("#saved").setAttribute("aria-pressed", savedOnly);
   const filtered = category !== "Tất cả" || query || savedOnly;
@@ -128,9 +136,16 @@ function selectCategory(c) {
 
 // LƯU / BỎ LƯU BÀI: dùng localStorage của trình duyệt.
 function toggleSave(id) {
+  const active = document.activeElement;
+  const restoreBookmark = active?.matches("#newsGrid [data-save]");
+
   saved.has(id) ? saved.delete(id) : saved.add(id);
   const ok = write("saved", [...saved]);
   render();
+  if (restoreBookmark) {
+    const replacement = document.querySelector('#newsGrid [data-save="' + id + '"]');
+    (replacement || $("#listTitle")).focus();
+  }
   if (currentArticle) {
     const btn = $("#readerSave");
     if (btn) {
@@ -162,16 +177,20 @@ function openArticle(id) {
     toast("Không tìm thấy bài viết");
     return;
   }
+  if (!$("#reader").open) readerOpener = document.activeElement;
+  const generation = ++speechGeneration;
   currentArticle = a;
   $("#articleContent").innerHTML =
-    `<span class="eyebrow">${a.category.toUpperCase()} / GÓC NHÌN PULSE</span><h1>${a.title}</h1><p style="color:var(--muted)">${a.description}</p><div class="meta" style="margin-top:20px">${a.author} · ${time(a)}/2026 · ${a.minutes} phút đọc</div><div class="article-tools"><button id="readerSave" data-save="${a.id}" aria-pressed="${saved.has(a.id)}">${saved.has(a.id) ? "◆ Đã lưu" : "◇ Lưu bài"}</button><button id="shareArticle">↗ Sao chép liên kết</button><button id="listenArticle">▷ Nghe bài viết</button></div><p class="article-disclaimer">Bài viết mẫu phục vụ trải nghiệm website. Ảnh minh họa từ Unsplash, không mô tả một sự kiện cụ thể.</p><div class="article-cover">${image(a)}</div><div class="body">${a.body.map((p, i) => (i === 1 || i === 3 ? "<h2>" + p + "</h2>" : "<p>" + p + "</p>")).join("")}</div><section class="comments"><h2>Góc nhìn của bạn</h2><p class="meta" style="margin-top:10px">Bình luận chỉ lưu trên trình duyệt của bạn.</p><form id="commentForm"><input name="name" aria-label="Tên hiển thị" placeholder="Tên của bạn" maxlength="50" required><textarea name="comment" aria-label="Nội dung bình luận" placeholder="Chia sẻ suy nghĩ của bạn…" rows="3" maxlength="1000" required></textarea><button>Đăng bình luận</button></form><div id="commentList"></div></section><section class="related"><h2>Tiếp tục khám phá</h2>${ARTICLES.filter(
+    `<span class="eyebrow">${a.category.toUpperCase()} / GÓC NHÌN PULSE</span><h1 id="articleTitle" tabindex="-1">${a.title}</h1><p style="color:var(--muted)">${a.description}</p><div class="meta" style="margin-top:20px">${a.author} · ${time(a)}/2026 · ${a.minutes} phút đọc</div><div class="article-tools"><button id="readerSave" data-save="${a.id}" aria-pressed="${saved.has(a.id)}">${saved.has(a.id) ? "◆ Đã lưu" : "◇ Lưu bài"}</button><button id="shareArticle">↗ Sao chép liên kết</button><button id="listenArticle" aria-pressed="false">▷ Nghe bài viết</button></div><p class="article-disclaimer">Bài viết mẫu phục vụ trải nghiệm website. Ảnh minh họa từ Unsplash, không mô tả một sự kiện cụ thể.</p><div class="article-cover">${image(a)}</div><div class="body">${a.body.map((p, i) => (i === 1 || i === 3 ? "<h2>" + p + "</h2>" : "<p>" + p + "</p>")).join("")}</div><section class="comments"><h2>Góc nhìn của bạn</h2><p class="meta" style="margin-top:10px">Bình luận chỉ lưu trên trình duyệt của bạn.</p><form id="commentForm"><label for="commentName">Tên hiển thị</label><input id="commentName" name="name" placeholder="Tên của bạn" maxlength="50" required><label for="commentText">Nội dung bình luận</label><textarea id="commentText" name="comment" placeholder="Chia sẻ suy nghĩ của bạn…" rows="3" maxlength="1000" required></textarea><button>Đăng bình luận</button></form><div id="commentList"></div></section><section class="related"><h2>Tiếp tục khám phá</h2>${ARTICLES.filter(
       (x) => x.category === a.category && x.id !== a.id,
     )
       .slice(0, 3)
       .map((x) => `<button data-open="${x.id}">${x.title} ↗</button>`)
       .join("")}</section>`;
+  $("#reader").append($("#toast"));
   renderComments(id);
   if (!$("#reader").open) $("#reader").showModal();
+  $("#articleTitle").focus();
   $("#reader").scrollTop = 0;
   document.body.style.overflow = "hidden";
   if ("speechSynthesis" in window) speechSynthesis.cancel();
@@ -183,24 +202,29 @@ function openArticle(id) {
       toast("Bạn có thể sao chép đường dẫn trên thanh địa chỉ.");
     }
   };
-  $("#listenArticle").onclick = () => {
+  const listenButton = $("#listenArticle");
+  const resetSpeech = () => {
+    if (generation !== speechGeneration) return;
+    listenButton.textContent = "▷ Nghe bài viết";
+    listenButton.setAttribute("aria-pressed", "false");
+  };
+  listenButton.onclick = () => {
     if (!("speechSynthesis" in window)) {
       toast("Trình duyệt chưa hỗ trợ đọc văn bản.");
       return;
     }
     if (speechSynthesis.speaking) {
       speechSynthesis.cancel();
-      $("#listenArticle").textContent = "▷ Nghe bài viết";
+      resetSpeech();
       return;
     }
     const speech = new SpeechSynthesisUtterance(a.title + ". " + a.body.join(". "));
     speech.lang = "vi-VN";
     speech.rate = 0.95;
-    speech.onend = speech.onerror = () => {
-      if ($("#listenArticle")) $("#listenArticle").textContent = "▷ Nghe bài viết";
-    };
+    speech.onend = speech.onerror = resetSpeech;
+    listenButton.textContent = "◼ Dừng đọc";
+    listenButton.setAttribute("aria-pressed", "true");
     speechSynthesis.speak(speech);
-    $("#listenArticle").textContent = "◼ Dừng đọc";
   };
   $("#commentForm").onsubmit = (e) => {
     e.preventDefault();
@@ -226,7 +250,17 @@ function openArticle(id) {
 
 // ĐÓNG BÀI VÀ ĐỊNH TUYẾN: phần #article-ID trên đường dẫn xác định bài.
 function closeReader() {
+  const wasOpen = $("#reader").open;
+  document.body.append($("#toast"));
+  ++speechGeneration;
   if ($("#reader").open) $("#reader").close();
+  if (wasOpen) {
+    const replacement = readerOpener?.getAttribute("href");
+    const target = readerOpener?.isConnected ? readerOpener :
+      [...document.querySelectorAll("a[href]")].find(link =>
+        replacement && link.getAttribute("href") === replacement);
+    (target || $("#main")).focus();
+  }
   currentArticle = null;
   document.body.style.overflow = "";
   if ("speechSynthesis" in window) speechSynthesis.cancel();
@@ -245,8 +279,14 @@ $("#date").textContent = new Date().toLocaleDateString("vi-VN", {
   year: "numeric",
 });
 if (read("news-theme", "light") === "dark") document.body.classList.add("dark");
+function syncTheme() {
+  $("#theme").setAttribute("aria-pressed", document.body.classList.contains("dark"));
+  $("#theme").setAttribute("aria-label", "Giao diện tối");
+}
+syncTheme();
 $("#theme").onclick = () => {
   document.body.classList.toggle("dark");
+  syncTheme();
   write("news-theme", document.body.classList.contains("dark") ? "dark" : "light");
 };
 const hero = ARTICLES[0];
@@ -342,8 +382,10 @@ $("#saved").onclick = () => {
 $("#clear").onclick = () => selectCategory("Tất cả");
 $("#sort").onchange = render;
 $("#loadMore").onclick = () => {
+  const previousCount = $("#newsGrid").children.length;
   limit += 9;
   render();
+  $("#newsGrid").children[previousCount]?.querySelector("a")?.focus();
 };
 $("#latestBtn").onclick = () => $(".news-section").scrollIntoView({ behavior: "smooth" });
 $("#backTop").onclick = () => window.scrollTo({ top: 0, behavior: "smooth" });
